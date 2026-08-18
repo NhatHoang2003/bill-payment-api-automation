@@ -2,9 +2,9 @@ name: API Automation Tests
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
   workflow_dispatch:
 
 jobs:
@@ -19,12 +19,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: npm
 
       - name: Install dependencies
         run: npm ci
 
-      # BƯỚC QUAN TRỌNG: Tạo file .env chứa đầy đủ các biến môi trường
       - name: Create .env file
         run: |
           echo "BASE_URL=https://billpay-api.gauravkhurana-practice-api.workers.dev" >> .env
