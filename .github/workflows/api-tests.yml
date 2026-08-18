@@ -12,23 +12,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout source code
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
-      # 3. Install dependencies
       - name: Install dependencies
         run: npm ci
 
-      # 4. Check GitHub Secrets
-      # Không in giá trị thật của secret ra log
       - name: Check GitHub Secrets
         env:
           API_KEY: ${{ secrets.API_KEY }}
@@ -37,41 +32,14 @@ jobs:
           OAUTH_USERNAME: ${{ secrets.OAUTH_USERNAME }}
           OAUTH_PASSWORD: ${{ secrets.OAUTH_PASSWORD }}
         run: |
-          if [ -z "$API_KEY" ]; then
-            echo "API_KEY is EMPTY"
-          else
-            echo "API_KEY exists"
-          fi
+          if [ -z "$API_KEY" ]; then echo "API_KEY is EMPTY"; else echo "API_KEY exists"; fi
+          if [ -z "$OAUTH_CLIENT_ID" ]; then echo "OAUTH_CLIENT_ID is EMPTY"; else echo "OAUTH_CLIENT_ID exists"; fi
+          if [ -z "$OAUTH_CLIENT_SECRET" ]; then echo "OAUTH_CLIENT_SECRET is EMPTY"; else echo "OAUTH_CLIENT_SECRET exists"; fi
+          if [ -z "$OAUTH_USERNAME" ]; then echo "OAUTH_USERNAME is EMPTY"; else echo "OAUTH_USERNAME exists"; fi
+          if [ -z "$OAUTH_PASSWORD" ]; then echo "OAUTH_PASSWORD is EMPTY"; else echo "OAUTH_PASSWORD exists"; fi
 
-          if [ -z "$OAUTH_CLIENT_ID" ]; then
-            echo "OAUTH_CLIENT_ID is EMPTY"
-          else
-            echo "OAUTH_CLIENT_ID exists"
-          fi
-
-          if [ -z "$OAUTH_CLIENT_SECRET" ]; then
-            echo "OAUTH_CLIENT_SECRET is EMPTY"
-          else
-            echo "OAUTH_CLIENT_SECRET exists"
-          fi
-
-          if [ -z "$OAUTH_USERNAME" ]; then
-            echo "OAUTH_USERNAME is EMPTY"
-          else
-            echo "OAUTH_USERNAME exists"
-          fi
-
-          if [ -z "$OAUTH_PASSWORD" ]; then
-            echo "OAUTH_PASSWORD is EMPTY"
-          else
-            echo "OAUTH_PASSWORD exists"
-          fi
-
-      # 5. Run Playwright Tests
-      # Truyền secrets trực tiếp vào process.env
-      - name: Run Playwright Tests
+      - name: Run Playwright tests
         env:
-          BASE_URL: https://billpay-api.gauravkhurana-practice-api.workers.dev
           API_KEY: ${{ secrets.API_KEY }}
           OAUTH_CLIENT_ID: ${{ secrets.OAUTH_CLIENT_ID }}
           OAUTH_CLIENT_SECRET: ${{ secrets.OAUTH_CLIENT_SECRET }}
@@ -79,7 +47,6 @@ jobs:
           OAUTH_PASSWORD: ${{ secrets.OAUTH_PASSWORD }}
         run: npx playwright test
 
-      # 6. Upload Playwright report
       - name: Upload Test Report
         if: always()
         uses: actions/upload-artifact@v4
