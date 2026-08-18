@@ -27,7 +27,6 @@ jobs:
       - name: Create .env file
         run: |
           echo "BASE_URL=https://billpay-api.gauravkhurana-practice-api.workers.dev" >> .env
-          echo "API_KEY=${{ secrets.API_KEY }}" >> .env
           echo "OAUTH_CLIENT_ID=${{ secrets.OAUTH_CLIENT_ID }}" >> .env
           echo "OAUTH_CLIENT_SECRET=${{ secrets.OAUTH_CLIENT_SECRET }}" >> .env
           echo "OAUTH_USERNAME=${{ secrets.OAUTH_USERNAME }}" >> .env
