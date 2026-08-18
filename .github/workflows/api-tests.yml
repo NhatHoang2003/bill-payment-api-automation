@@ -27,14 +27,39 @@ jobs:
       - name: Create .env file
         run: |
           echo "BASE_URL=https://billpay-api.gauravkhurana-practice-api.workers.dev" >> .env
+          echo "API_KEY=${{ secrets.API_KEY }}" >> .env
           echo "OAUTH_CLIENT_ID=${{ secrets.OAUTH_CLIENT_ID }}" >> .env
           echo "OAUTH_CLIENT_SECRET=${{ secrets.OAUTH_CLIENT_SECRET }}" >> .env
           echo "OAUTH_USERNAME=${{ secrets.OAUTH_USERNAME }}" >> .env
           echo "OAUTH_PASSWORD=${{ secrets.OAUTH_PASSWORD }}" >> .env
 
+      - name: Check environment variables
+        run: |
+          test -n "${{ secrets.API_KEY }}" \
+            && echo "API_KEY exists" \
+            || echo "API_KEY is EMPTY"
+
+          test -n "${{ secrets.OAUTH_CLIENT_ID }}" \
+            && echo "OAUTH_CLIENT_ID exists" \
+            || echo "OAUTH_CLIENT_ID is EMPTY"
+
+          test -n "${{ secrets.OAUTH_CLIENT_SECRET }}" \
+            && echo "OAUTH_CLIENT_SECRET exists" \
+            || echo "OAUTH_CLIENT_SECRET is EMPTY"
+
+          test -n "${{ secrets.OAUTH_USERNAME }}" \
+            && echo "OAUTH_USERNAME exists" \
+            || echo "OAUTH_USERNAME is EMPTY"
+
+          test -n "${{ secrets.OAUTH_PASSWORD }}" \
+            && echo "OAUTH_PASSWORD exists" \
+            || echo "OAUTH_PASSWORD is EMPTY"
+
+      # 6. Run Playwright API tests
       - name: Run Playwright Tests
         run: npx playwright test
 
+      # 7. Upload Playwright report even when tests fail
       - name: Upload Test Report
         if: always()
         uses: actions/upload-artifact@v4

@@ -14,7 +14,7 @@ function getEnv(name: string): string {
 
 export const env = {
     baseUrl: getEnv('BASE_URL'),
-    // apiKey: getEnv('API_KEY'),
+    apiKey: getEnv('API_KEY'),
     oauthClientId: getEnv('OAUTH_CLIENT_ID'),
     oauthClientSecret: getEnv('OAUTH_CLIENT_SECRET'),
     oauthUsername: getEnv('OAUTH_USERNAME'),
