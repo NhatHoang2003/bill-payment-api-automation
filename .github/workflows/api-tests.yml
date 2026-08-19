@@ -40,6 +40,7 @@ jobs:
 
       - name: Run Playwright tests
         env:
+          BASE_URL: https://billpay-api.gauravkhurana-practice-api.workers.dev
           API_KEY: ${{ secrets.API_KEY }}
           OAUTH_CLIENT_ID: ${{ secrets.OAUTH_CLIENT_ID }}
           OAUTH_CLIENT_SECRET: ${{ secrets.OAUTH_CLIENT_SECRET }}
