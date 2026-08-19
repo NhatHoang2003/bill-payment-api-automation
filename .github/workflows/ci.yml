@@ -1,4 +1,4 @@
-name: API Automation Tests
+name: API Automation CI
 
 on:
   push:
@@ -7,8 +7,12 @@ on:
     branches: [main, master]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   test:
+    name: Run API Automation Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -32,11 +36,32 @@ jobs:
           OAUTH_USERNAME: ${{ secrets.OAUTH_USERNAME }}
           OAUTH_PASSWORD: ${{ secrets.OAUTH_PASSWORD }}
         run: |
-          if [ -z "$API_KEY" ]; then echo "API_KEY is EMPTY"; else echo "API_KEY exists"; fi
-          if [ -z "$OAUTH_CLIENT_ID" ]; then echo "OAUTH_CLIENT_ID is EMPTY"; else echo "OAUTH_CLIENT_ID exists"; fi
-          if [ -z "$OAUTH_CLIENT_SECRET" ]; then echo "OAUTH_CLIENT_SECRET is EMPTY"; else echo "OAUTH_CLIENT_SECRET exists"; fi
-          if [ -z "$OAUTH_USERNAME" ]; then echo "OAUTH_USERNAME is EMPTY"; else echo "OAUTH_USERNAME exists"; fi
-          if [ -z "$OAUTH_PASSWORD" ]; then echo "OAUTH_PASSWORD is EMPTY"; else echo "OAUTH_PASSWORD exists"; fi
+          if [ -z "$API_KEY" ]; then
+            echo "API_KEY is EMPTY"
+            exit 1
+          fi
+
+          if [ -z "$OAUTH_CLIENT_ID" ]; then
+            echo "OAUTH_CLIENT_ID is EMPTY"
+            exit 1
+          fi
+
+          if [ -z "$OAUTH_CLIENT_SECRET" ]; then
+            echo "OAUTH_CLIENT_SECRET is EMPTY"
+            exit 1
+          fi
+
+          if [ -z "$OAUTH_USERNAME" ]; then
+            echo "OAUTH_USERNAME is EMPTY"
+            exit 1
+          fi
+
+          if [ -z "$OAUTH_PASSWORD" ]; then
+            echo "OAUTH_PASSWORD is EMPTY"
+            exit 1
+          fi
+
+          echo "All required secrets exist"
 
       - name: Run Playwright tests
         env:
@@ -48,7 +73,7 @@ jobs:
           OAUTH_PASSWORD: ${{ secrets.OAUTH_PASSWORD }}
         run: npx playwright test
 
-      - name: Upload Test Report
+      - name: Upload Playwright Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
