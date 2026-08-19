@@ -1,4 +1,4 @@
-import { test, expect } from '../../fixtures/ApiFixture';
+import { test, expect } from '../../src/fixtures/ApiFixture';
 
 test.describe('Health API', () => {
     

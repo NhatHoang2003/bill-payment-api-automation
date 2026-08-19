@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
-import { clientTokenCases } from '../../data/auth/clientTokenCases';
-import { AuthService } from '../../services/AuthService';
+import { AuthService } from '../../src/services/AuthService';
+import { clientTokenCases } from '../../src/data/auth/clientTokenCases';
+
 
 test.describe('POST /oauth/token - client_credentials', () => {
 

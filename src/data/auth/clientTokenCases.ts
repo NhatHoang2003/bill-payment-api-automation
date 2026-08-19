@@ -12,8 +12,8 @@ export const clientTokenCases = [
 
         request: {
             grant_type: 'client_credentials',
-            client_id: env.oauthClientId,
-            client_secret: env.oauthClientSecret,
+            client_id: env.oauth.clientId,
+            client_secret: env.oauth.clientSecret,
         },
 
         expected: {
@@ -38,10 +38,10 @@ export const clientTokenCases = [
 
         request: {
             grant_type: 'client_credentials',
-            client_id: env.oauthClientId,
-            client_secret: env.oauthClientSecret,
-            username: 'demo',
-            password: 'password123',
+            client_id: env.oauth.clientId,
+            client_secret: env.oauth.clientSecret,
+            username: env.oauth.username,
+            password: env.oauth.password,
             refresh_token: '',
         },
 
@@ -67,8 +67,8 @@ export const clientTokenCases = [
 
         request: {
             grant_type: 'invalid_grant',
-            client_id: env.oauthClientId,
-            client_secret: env.oauthClientSecret,
+            client_id: env.oauth.clientId,
+            client_secret: env.oauth.clientSecret,
         },
 
         expected: {
@@ -97,7 +97,7 @@ export const clientTokenCases = [
         request: {
             grant_type: 'client_credentials',
             client_id: 'invalid-client',
-            client_secret: env.oauthClientSecret,
+            client_secret: env.oauth.clientSecret,
         },
 
         expected: {
@@ -124,7 +124,7 @@ export const clientTokenCases = [
 
         request: {
             grant_type: 'client_credentials',
-            client_id: env.oauthClientId,
+            client_id: env.oauth.clientId,
             client_secret: 'invalid-secret',
         },
 
@@ -152,7 +152,7 @@ export const clientTokenCases = [
 
         request: {
             grant_type: 'client_credentials',
-            client_secret: env.oauthClientSecret,
+            client_secret: env.oauth.clientSecret,
         },
 
         expected: {
@@ -179,7 +179,7 @@ export const clientTokenCases = [
 
         request: {
             grant_type: 'client_credentials',
-            client_id: env.oauthClientId,
+            client_id: env.oauth.clientId,
         },
 
         expected: {

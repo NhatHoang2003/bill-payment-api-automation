@@ -1,8 +1,8 @@
-import { APIRequestContext } from '@playwright/test';
-import { test, expect } from '../../fixtures/ApiFixture';
-import { AuthService } from '../../services/AuthService';
-import { env } from '../../config/env';
-import { refreshTokenCases } from '../../data/auth/refreshTokenCases';
+import { APIRequestContext, expect, test } from '@playwright/test';
+import { AuthService } from '../../src/services/AuthService';
+import { env } from '../../src/config/env';
+import { refreshTokenCases } from '../../src/data/auth/refreshTokenCases';
+
 
 test.describe('POST /oauth/token - refresh_token', () => {
     
@@ -19,8 +19,8 @@ test.describe('POST /oauth/token - refresh_token', () => {
     
         const passwordResponse = await authService.getTokenJson({
             grant_type: 'password',
-            username: env.oauthUsername,
-            password: env.oauthPassword,
+            username: env.oauth.username,
+            password: env.oauth.password,
         });
     
         expect(passwordResponse.status()).toBe(200);

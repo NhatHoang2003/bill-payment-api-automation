@@ -12,8 +12,8 @@ export const passwordTokenCases = [
 
         request: {
             grant_type: 'password',
-            username: env.oauthUsername,
-            password: env.oauthPassword,
+            username: env.oauth.username,
+            password: env.oauth.password,
         },
 
         expected: {
@@ -39,8 +39,8 @@ export const passwordTokenCases = [
 
         request: {
             grant_type: 'password',
-            username: env.oauthUsername,
-            password: env.oauthPassword,
+            username: env.oauth.username,
+            password: env.oauth.password,
         },
 
         expected: {
@@ -67,7 +67,7 @@ export const passwordTokenCases = [
         request: {
             grant_type: 'password',
             username: 'invalid-user',
-            password: env.oauthPassword,
+            password: env.oauth.password,
         },
 
         expected: {
@@ -90,7 +90,7 @@ export const passwordTokenCases = [
 
         request: {
             grant_type: 'password',
-            username: env.oauthUsername,
+            username: env.oauth.username,
             password: 'invalid-password',
         },
 
@@ -118,7 +118,7 @@ export const passwordTokenCases = [
 
         request: {
             grant_type: 'password',
-            password: env.oauthPassword,
+            password: env.oauth.password,
         },
 
         expected: {
@@ -141,7 +141,7 @@ export const passwordTokenCases = [
 
         request: {
             grant_type: 'password',
-            username: env.oauthUsername,
+            username: env.oauth.username,
         },
 
         expected: {

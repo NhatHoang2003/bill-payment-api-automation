@@ -1,6 +1,6 @@
 import { APIRequestContext, APIResponse } from '@playwright/test';
 import { ApiClient } from '../clients/ApiClient';
-import { TokenRequest } from '../models/auth/TokenRequest';
+import { TokenRequest } from 'src/models/auth/TokenRequest';
 
 export class AuthService {
     private readonly apiClient: ApiClient;
@@ -29,5 +29,14 @@ export class AuthService {
             },
             data: formData.toString(),
         });
+    }
+
+    async getCurrenUser(token: string): Promise<APIResponse> {
+        return this.apiClient.get('/v1/auth/me', {
+            headers: {
+                Accept: 'application/json',
+                Authorization: `${token}`,
+            }
+        })
     }
 }

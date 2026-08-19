@@ -1,6 +1,6 @@
 import { test as base } from '@playwright/test';
-import { AuthService } from '../services/AuthService';
 import { HealthService } from '../services/HealthService';
+import { AuthService } from '../services/AuthService';
 
 type ApiFixtures = {
     healthService: HealthService;
@@ -8,7 +8,6 @@ type ApiFixtures = {
 };
 
 export const test = base.extend<ApiFixtures>({
-    
     healthService: async ({ request }, use) => {
         const healthService = new HealthService(request);
         await use(healthService);
@@ -21,4 +20,3 @@ export const test = base.extend<ApiFixtures>({
 });
 
 export { expect } from '@playwright/test';
-
