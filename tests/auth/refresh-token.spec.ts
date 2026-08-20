@@ -10,7 +10,7 @@ test.describe('POST /oauth/token - refresh_token', () => {
     let authService: AuthService;
     let refreshToken: string;
     
-    test.beforeAll(async ({ playwright }) => {
+    test.beforeEach(async ({ playwright }) => {
         request = await playwright.request.newContext({
             baseURL: env.baseUrl,
         });
@@ -36,7 +36,7 @@ test.describe('POST /oauth/token - refresh_token', () => {
         await request.dispose();
     });
 
-    test('should get access token using refresh token grant with JSON', async () => {
+    test('should get access token using refresh token grant with JSON', async ({ request }) => {
 
         const response = await authService.getTokenJson({
             grant_type: 'refresh_token',

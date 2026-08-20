@@ -35,31 +35,16 @@ jobs:
           OAUTH_CLIENT_SECRET: ${{ secrets.OAUTH_CLIENT_SECRET }}
           OAUTH_USERNAME: ${{ secrets.OAUTH_USERNAME }}
           OAUTH_PASSWORD: ${{ secrets.OAUTH_PASSWORD }}
+          BASIC_USERNAME: ${{ secrets.BASIC_USERNAME }}
+          BASIC_PASSWORD: ${{ secrets.BASIC_PASSWORD }}
+          BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
         run: |
-          if [ -z "$API_KEY" ]; then
-            echo "API_KEY is EMPTY"
-            exit 1
-          fi
-
-          if [ -z "$OAUTH_CLIENT_ID" ]; then
-            echo "OAUTH_CLIENT_ID is EMPTY"
-            exit 1
-          fi
-
-          if [ -z "$OAUTH_CLIENT_SECRET" ]; then
-            echo "OAUTH_CLIENT_SECRET is EMPTY"
-            exit 1
-          fi
-
-          if [ -z "$OAUTH_USERNAME" ]; then
-            echo "OAUTH_USERNAME is EMPTY"
-            exit 1
-          fi
-
-          if [ -z "$OAUTH_PASSWORD" ]; then
-            echo "OAUTH_PASSWORD is EMPTY"
-            exit 1
-          fi
+          if [ -z "$API_KEY" ]; then echo "API_KEY is EMPTY"; exit 1; fi
+          if [ -z "$OAUTH_CLIENT_ID" ]; then echo "OAUTH_CLIENT_ID is EMPTY"; exit 1; fi
+          if [ -z "$OAUTH_CLIENT_SECRET" ]; then echo "OAUTH_CLIENT_SECRET is EMPTY"; exit 1; fi
+          if [ -z "$BASIC_USERNAME" ]; then echo "BASIC_USERNAME is EMPTY"; exit 1; fi
+          if [ -z "$BASIC_PASSWORD" ]; then echo "BASIC_PASSWORD is EMPTY"; exit 1; fi
+          if [ -z "$BEARER_TOKEN" ]; then echo "BEARER_TOKEN is EMPTY"; exit 1; fi
 
           echo "All required secrets exist"
 
@@ -71,6 +56,9 @@ jobs:
           OAUTH_CLIENT_SECRET: ${{ secrets.OAUTH_CLIENT_SECRET }}
           OAUTH_USERNAME: ${{ secrets.OAUTH_USERNAME }}
           OAUTH_PASSWORD: ${{ secrets.OAUTH_PASSWORD }}
+          BASIC_USERNAME: ${{ secrets.BASIC_USERNAME }}
+          BASIC_PASSWORD: ${{ secrets.BASIC_PASSWORD }}
+          BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
         run: npx playwright test
 
       - name: Upload Playwright Report
