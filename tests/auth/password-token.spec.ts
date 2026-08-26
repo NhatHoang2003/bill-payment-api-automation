@@ -28,13 +28,13 @@ test.describe('POST /oauth/token - password', () => {
                 expect(body.scope).toBeTruthy();
                 expect(body.created_at).toBeTruthy();
             }
-        
+
             if (testCase.expected.status !== 200) {
                 expect(body.success).toBe(testCase.expected.body.success);
                 expect(body.error.code).toBe(testCase.expected.body.error?.code);
-                
-                if(typeof testCase.expected.body.error?.message === 'string') {
-                    expect(body.error.message).toBe(testCase.expected.body.error?.message); 
+
+                if (typeof testCase.expected.body.error?.message === 'string') {
+                    expect(body.error.message).toBe(testCase.expected.body.error?.message);
                 } else {
                     expect(body.error.message).toBeTruthy();
                 }

@@ -1,0 +1,53 @@
+{
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "string",
+            "example": "usr_abc123"
+        },
+        "email": {
+            "type": "string",
+            "format": "email",
+            "example": "john@example.com"
+        },
+        "phone": {
+            "type": "string",
+            "example": "+1234567890"
+        },
+        "firstName": {
+            "type": "string",
+            "example": "John"
+        },
+        "lastName": {
+            "type": "string",
+            "example": "Doe"
+        },
+        "kycStatus": {
+            "type": "string",
+            "enum": [
+                "pending",
+                "verified",
+                "rejected"
+            ],
+            "example": "verified"
+        },
+        "address": {
+            "$ref": "#/components/schemas/Address"
+        },
+        "createdAt": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+        }
+    },
+    "required": [
+        "id",
+        "email",
+        "firstName",
+        "lastName",
+        "kycStatus"
+    ]
+}

@@ -11,7 +11,7 @@ export class AuthService {
 
     async getTokenJson(body: TokenRequest): Promise<APIResponse> {
         return this.apiClient.post('/oauth/token', {
-            data: body 
+            data: body
         });
     }
 
@@ -61,7 +61,7 @@ export class AuthService {
         username: string,
         password: string
     ): Promise<APIResponse> {
-        
+
         const credentials = Buffer
             .from(`${username}:${password}`)
             .toString('base64');
