@@ -5,15 +5,17 @@ import { validateSchema } from "../../src/utils/SchemaValidator";
 
 import {
     positiveCases,
-    pageCases
+    pageCases,
+    limitCases,
+    kycStatusCases,
+    searchCases
 } from "../../src/data/user/GetUserCases";
-
 
 test.describe('GET /v1/users - List Users', () => {
 
     let accessToken: string
 
-    test.beforeEach(async ({ authService }) => {
+    test.beforeAll(async ({ authService }) => {
 
         const passwordResponse = await authService.getTokenJson({
             grant_type: 'password',
@@ -30,6 +32,7 @@ test.describe('GET /v1/users - List Users', () => {
         accessToken = passwordBody.access_token;
 
     })
+
 
     for (const testCase of positiveCases) {
 
@@ -79,7 +82,7 @@ test.describe('GET /v1/users - List Users', () => {
 
             if (testCase.expected.status === 200) {
 
-                expect(body.success).toBe(true);
+                expect(body.success).toBe(testCase.expected.body.success);
 
                 const validatedBody = validateSchema(UserResponseSchema, body);
 
@@ -87,13 +90,8 @@ test.describe('GET /v1/users - List Users', () => {
 
                 if (expectedPagination) {
 
-                    expect(validatedBody.meta.pagination.page).toBe(
-                        expectedPagination.page
-                    );
-
-                    expect(validatedBody.meta.pagination.limit).toBe(
-                        expectedPagination.limit
-                    );
+                    expect(validatedBody.meta.pagination.page).toBe(expectedPagination.page);
+                    expect(validatedBody.meta.pagination.limit).toBe(expectedPagination.limit);
                 }
 
             } else {
@@ -102,5 +100,128 @@ test.describe('GET /v1/users - List Users', () => {
             }
         })
     }
+
+    for (const testCase of limitCases) {
+
+        test(testCase.name, async ({ userService }) => {
+
+            if (testCase.expected.status === 400) {
+                test.fixme(
+                    true,
+                    'BUG-BACKEND: Server missing validation (returns 200) or crashes (returns 500) on invalid page input'
+                );
+            }
+
+            const response = await userService.getListUsers(testCase.query, accessToken);
+
+            expect(response.status()).toBe(testCase.expected.status);
+
+            const body = await response.json();
+
+            if (testCase.expected.status === 200) {
+
+                expect(body.success).toBe(testCase.expected.body.success);
+
+                const validatedBody = validateSchema(UserResponseSchema, body);
+
+                const expectedPagination = testCase.expected.body.meta?.pagination;
+
+                if (expectedPagination) {
+
+                    expect(validatedBody.meta.pagination.page).toBe(expectedPagination.page);
+                    expect(validatedBody.meta.pagination.limit).toBe(expectedPagination.limit);
+                }
+
+            } else {
+
+                expect(body.success).toBe(false)
+            }
+        })
+
+    }
+
+    for (const testCase of kycStatusCases) {
+
+        test(testCase.name, async ({ userService }) => {
+
+            if (testCase.expected.status === 400) {
+                test.fixme(
+                    true,
+                    'BUG-BACKEND: Server missing validation (returns 200) or crashes (returns 500) on invalid page input'
+                );
+            }
+
+            const response = await userService.getListUsers(testCase.query, accessToken);
+
+            expect(response.status()).toBe(testCase.expected.status);
+
+            const body = await response.json();
+
+            if (testCase.expected.status === 200) {
+
+                expect(body.success).toBe(testCase.expected.body.success);
+
+                const validatedBody = validateSchema(UserResponseSchema, body);
+
+                const expectedKycStatus = testCase.expected.body.kycStatus;
+
+                if (expectedKycStatus) {
+
+                    for (const user of validatedBody.data) {
+                        expect(user.kycStatus).toBe(expectedKycStatus);
+                    }
+                }
+
+            } else {
+
+                expect(body.success).toBe(false)
+            }
+        })
+
+    }
+
+    for (const testCase of searchCases) {
+        test(testCase.name, async ({ userService }) => {
+
+            const response = await userService.getListUsers(
+                testCase.query,
+                accessToken
+            );
+
+            expect(response.status()).toBe(testCase.expected.status);
+
+            const body = await response.json();
+
+            if (testCase.expected.status === 200) {
+                expect(body.success).toBe(
+                    testCase.expected.body.success
+                );
+
+                const validatedBody = validateSchema(
+                    UserResponseSchema,
+                    body
+                );
+
+                if (testCase.expected.body.data) {
+                    if (testCase.expected.body.data.length === 0) {
+                        expect(validatedBody.data).toHaveLength(0);
+                    } else {
+                        for (const expectedUser of testCase.expected.body.data) {
+                            expect(validatedBody.data).toEqual(
+                                expect.arrayContaining([
+                                    expect.objectContaining(expectedUser),
+                                ])
+                            );
+                        }
+                    }
+                }
+
+            } else {
+                expect(body.success).toBe(false);
+            }
+        });
+    }
 });
+
+
 

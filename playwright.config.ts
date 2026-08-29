@@ -28,7 +28,7 @@ export default defineConfig({
   use: {
     baseURL: process.env.BASE_URL,
 
-    
+
 
     extraHTTPHeaders: {
       Accept: 'application/json',

@@ -1,6 +1,6 @@
 export interface UserRequest {
-    page?: number | string | boolean | any;
-    limit?: number | string | boolean | any;
-    kyc_status?: string,
-    search?: string,
+    page?: number | string | boolean | any | number[];
+    limit?: number | string | boolean | any | number[];
+    kyc_status?: number | string | boolean | any | number[],
+    search?: number | string | boolean | any | number[],
 }

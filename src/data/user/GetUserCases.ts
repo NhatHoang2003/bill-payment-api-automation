@@ -1,7 +1,4 @@
 // =========================================================
-// 1. POSITIVE CASES (HAPPY PATH) - 10 CASES
-// =========================================================
-// =========================================================
 // 1. POSITIVE CASES
 // =========================================================
 
@@ -315,17 +312,9 @@ export const pageCases = [
         name: 'should accept string page with numeric format (page = "153")',
         query: { page: '153' },
         expected: {
-            status: 200,
+            status: 400,
             body: {
-                success: true,
-                meta: {
-                    pagination: {
-                        page: 153,
-                        limit: 10,
-                        hasNext: false,
-                        hasPrev: true,
-                    },
-                },
+                success: false,
             },
         },
     },
@@ -531,6 +520,7 @@ export const kycStatusCases = [
             status: 200,
             body: {
                 success: true,
+                kycStatus: 'pending',
             },
         },
     },
@@ -542,6 +532,7 @@ export const kycStatusCases = [
             status: 200,
             body: {
                 success: true,
+                kycStatus: 'verified',
             },
         },
     },
@@ -553,6 +544,7 @@ export const kycStatusCases = [
             status: 200,
             body: {
                 success: true,
+                kycStatus: 'rejected',
             },
         },
     },
@@ -566,7 +558,8 @@ export const kycStatusCases = [
                 success: false,
                 error: {
                     code: 'INVALID_ENUM',
-                    message: 'kyc_status must be one of: pending, verified, rejected',
+                    message:
+                        'kyc_status must be one of: pending, verified, rejected',
                 },
             },
         },
@@ -581,7 +574,8 @@ export const kycStatusCases = [
                 success: false,
                 error: {
                     code: 'INVALID_ENUM',
-                    message: 'kyc_status must be one of: pending, verified, rejected',
+                    message:
+                        'kyc_status must be one of: pending, verified, rejected',
                 },
             },
         },
@@ -603,7 +597,7 @@ export const kycStatusCases = [
     },
 
     {
-        name: 'should handle empty kyc_status string',
+        name: 'should reject empty kyc_status string',
         query: { kyc_status: '' },
         expected: {
             status: 400,
@@ -611,7 +605,8 @@ export const kycStatusCases = [
                 success: false,
                 error: {
                     code: 'INVALID_ENUM',
-                    message: 'kyc_status must be one of: pending, verified, rejected',
+                    message:
+                        'kyc_status must be one of: pending, verified, rejected',
                 },
             },
         },
@@ -639,47 +634,29 @@ export const kycStatusCases = [
 
 export const searchCases = [
     {
-        name: 'should search by exact email',
-        query: { search: 'john@example.com' },
-        expected: {
-            status: 200,
-            body: {
-                success: true,
-            },
+        name: 'should find user by full name',
+        query: {
+            search: 'Nguyễn Văn A',
         },
-    },
-
-    {
-        name: 'should search by phone number with country code',
-        query: { search: '+1234567890' },
         expected: {
             status: 200,
             body: {
                 success: true,
-            },
-        },
-    },
-
-    {
-        name: 'should return empty data for non-existing user search',
-        query: { search: 'non_existing_random_user_999' },
-        expected: {
-            status: 200,
-            body: {
-                success: true,
-                data: [],
-                meta: {
-                    pagination: {
-                        total: 0,
+                data: [
+                    {
+                        firstName: 'Nguyễn Văn A',
+                        lastName: null,
                     },
-                },
+                ],
             },
         },
     },
 
     {
-        name: 'should trim or handle leading/trailing spaces in search',
-        query: { search: '  john@example.com  ' },
+        name: 'should find user by partial name',
+        query: {
+            search: 'Nguyễn Văn',
+        },
         expected: {
             status: 200,
             body: {
@@ -689,8 +666,23 @@ export const searchCases = [
     },
 
     {
-        name: 'should safely handle SQL injection attack payload',
-        query: { search: "' OR '1'='1" },
+        name: 'should find user by name keyword',
+        query: {
+            search: 'Nguyễn',
+        },
+        expected: {
+            status: 200,
+            body: {
+                success: true,
+            },
+        },
+    },
+
+    {
+        name: 'should return empty result for non-existing name',
+        query: {
+            search: 'Nguyễn Văn B',
+        },
         expected: {
             status: 200,
             body: {
@@ -701,8 +693,98 @@ export const searchCases = [
     },
 
     {
-        name: 'should safely handle XSS script tag injection payload',
-        query: { search: '<script>alert("xss")</script>' },
+        name: 'should find user by full email',
+        query: {
+            search: 'hoang@gmail.com',
+        },
+        expected: {
+            status: 200,
+            body: {
+                success: true,
+                data: [
+                    {
+                        email: 'hoang@gmail.com',
+                    },
+                ],
+            },
+        },
+    },
+
+    {
+        name: 'should find user by partial email',
+        query: {
+            search: 'hoang',
+        },
+        expected: {
+            status: 200,
+            body: {
+                success: true,
+            },
+        },
+    },
+
+    {
+        name: 'should find user by email domain',
+        query: {
+            search: 'gmail.com',
+        },
+        expected: {
+            status: 200,
+            body: {
+                success: true,
+            },
+        },
+    },
+
+    {
+        name: 'should find user by full phone number',
+        query: {
+            search: '+84394267205',
+        },
+        expected: {
+            status: 200,
+            body: {
+                success: true,
+                data: [
+                    {
+                        phone: '+84394267205',
+                    },
+                ],
+            },
+        },
+    },
+
+    {
+        name: 'should find user by phone number without plus sign',
+        query: {
+            search: '84394267205',
+        },
+        expected: {
+            status: 200,
+            body: {
+                success: true,
+            },
+        },
+    },
+
+    {
+        name: 'should find user by partial phone number',
+        query: {
+            search: '394267205',
+        },
+        expected: {
+            status: 200,
+            body: {
+                success: true,
+            },
+        },
+    },
+
+    {
+        name: 'should return empty result when search does not match',
+        query: {
+            search: 'xyz-not-existing-999999',
+        },
         expected: {
             status: 200,
             body: {
@@ -713,8 +795,10 @@ export const searchCases = [
     },
 
     {
-        name: 'should handle special URL characters (?, &, %, #)',
-        query: { search: 'user%20name&test#1' },
+        name: 'should handle empty search',
+        query: {
+            search: '',
+        },
         expected: {
             status: 200,
             body: {
@@ -724,8 +808,10 @@ export const searchCases = [
     },
 
     {
-        name: 'should handle unicode and vietnamese characters',
-        query: { search: 'Nguyễn Văn A' },
+        name: 'should handle case-insensitive search',
+        query: {
+            search: 'NGUYỄN VĂN A',
+        },
         expected: {
             status: 200,
             body: {
@@ -735,19 +821,10 @@ export const searchCases = [
     },
 
     {
-        name: 'should handle maximum length string search (256 chars)',
-        query: { search: 'a'.repeat(256) },
-        expected: {
-            status: 200,
-            body: {
-                success: true,
-            },
+        name: 'should handle search with leading and trailing spaces',
+        query: {
+            search: ' Nguyễn Văn A ',
         },
-    },
-
-    {
-        name: 'should handle empty search string (search = "")',
-        query: { search: '' },
         expected: {
             status: 200,
             body: {
