@@ -1,0 +1,196 @@
+1. Bộ manual test case đầy đủ
+
+// =========================================================
+
+A. Basic / Positive
+| ID   | Test case                                    |
+| ---- | -------------------------------------------- |
+| U001 | Get users without parameters                 |
+| U002 | Get users with `page=1`                      |
+| U003 | Get users with `limit=10`                    |
+| U004 | Get users with `page=1&limit=10`             |
+| U005 | Filter `kyc_status=pending`                  |
+| U006 | Filter `kyc_status=verified`                 |
+| U007 | Filter `kyc_status=rejected`                 |
+| U008 | Search by email                              |
+| U009 | Search by name                               |
+| U010 | Search by phone                              |
+| U011 | Combine `page + limit + kyc_status + search` |
+
+// =========================================================
+
+B. page validation
+| ID   | Test case                |
+| ---- | ------------------------ |
+| U012 | `page=1`                 |
+| U013 | `page=2`                 |
+| U014 | `page` = last valid page |
+| U015 | `page=0`                 |
+| U016 | `page=-1`                |
+| U017 | `page=1.5`               |
+| U018 | `page=abc`               |
+| U019 | `page` empty             |
+| U020 | `page=null`              |
+
+
+// =========================================================
+
+C. limit validation
+
+Swagger nói max 100, nên cần kiểm tra boundary.
+| ID   | Test case     |
+| ---- | ------------- |
+| U021 | `limit=1`     |
+| U022 | `limit=10`    |
+| U023 | `limit=99`    |
+| U024 | `limit=100`   |
+| U025 | `limit=101`   |
+| U026 | `limit=0`     |
+| U027 | `limit=-1`    |
+| U028 | `limit=1.5`   |
+| U029 | `limit=abc`   |
+| U030 | `limit` empty |
+| U031 | `limit=null`  |
+
+
+// =========================================================
+
+D. kyc_status validation
+
+Có 3 giá trị hợp lệ:
+pending
+verified
+rejected
+
+| ID   | Test case             |
+| ---- | --------------------- |
+| U032 | `kyc_status=pending`  |
+| U033 | `kyc_status=verified` |
+| U034 | `kyc_status=rejected` |
+| U035 | Invalid status        |
+| U036 | Empty status          |
+| U037 | `null` status         |
+| U038 | Uppercase status      |
+| U039 | Mixed-case status     |
+
+// =========================================================
+
+E. search
+Vì Swagger nói:
+Search by email, name, or phone
+
+| ID   | Test case                      |
+| ---- | ------------------------------ |
+| U040 | Search existing email          |
+| U041 | Search existing first name     |
+| U042 | Search existing last name      |
+| U043 | Search existing phone          |
+| U044 | Search non-existing value      |
+| U045 | Empty search                   |
+| U046 | `search=null`                  |
+| U047 | Search with spaces             |
+| U048 | Search with special characters |
+| U049 | Search with very long string   |
+
+
+// =========================================================
+
+F. Pagination behavior
+
+Đây là phần không nên bỏ qua, vì response có:
+
+"pagination": {
+    "page": 1,
+    "limit": 10,
+    "total": 100,
+    "totalPages": 10,
+    "hasNext": true,
+    "hasPrev": false
+}
+
+| ID   | Test case                                   |
+| ---- | ------------------------------------------- |
+| U050 | Verify first page                           |
+| U051 | Verify middle page                          |
+| U052 | Verify last page                            |
+| U053 | Verify `hasNext=true` when next page exists |
+| U054 | Verify `hasNext=false` on last page         |
+| U055 | Verify `hasPrev=false` on first page        |
+| U056 | Verify `hasPrev=true` after first page      |
+| U057 | Verify returned data count ≤ limit          |
+| U058 | Verify `totalPages` calculation             |
+| U059 | Verify page/limit in response match request |
+
+// =========================================================
+
+G. Response body/schema
+
+Response của bạn có khá nhiều field nên phải validate.
+
+Root {
+    success
+    data
+    meta
+}
+
+
+User {
+    id
+    email
+    phone
+    firstName
+    lastName
+    kycStatus
+    address
+    createdAt
+    updatedAt
+}
+
+Address {
+    line1
+    line2
+    city
+    state
+    postalCode
+    country
+}
+
+Meta {
+    requestId
+    timestamp
+    version
+    pagination
+}
+
+Có thể gom thành các schema validation cases thay vì tách từng field thành một test.
+| ID   | Test case                                      |
+| ---- | ---------------------------------------------- |
+| U060 | Validate root response schema                  |
+| U061 | Validate user object schema                    |
+| U062 | Validate address schema                        |
+| U063 | Validate meta schema                           |
+| U064 | Validate pagination schema                     |
+| U065 | Validate nullable fields (`lastName`, `line2`) |
+| U066 | Validate `kycStatus` enum                      |
+| U067 | Validate date-time format                      |
+| U068 | Validate `success=true`                        |
+| U069 | Validate `data` is array                       |
+| U070 | Validate HTTP 200                              |
+
+// =========================================================
+
+Tổng cộng
+
+Nếu lấy bộ đầy đủ theo Swagger + boundary + response contract như trên:
+
+70 manual test cases
+Basic/Positive             11
+page validation             9
+limit validation           11
+kyc_status validation       8
+search                     10
+pagination behavior        10   
+response/schema             11
+--------------------------------
+TOTAL                      70
+
