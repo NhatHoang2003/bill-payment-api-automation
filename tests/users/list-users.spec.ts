@@ -1,6 +1,6 @@
 import { test, expect } from "../../src/fixtures/ApiFixture";
 import { env } from "../../src/config/env";
-import { UserResponseSchema } from "../../src/schemas/user/UserResponseSchema";
+import { UserResponseSchema } from "../../src/schemas/users/UserResponseSchema";
 import { validateSchema } from "../../src/utils/SchemaValidator";
 
 import {
@@ -9,7 +9,7 @@ import {
     limitCases,
     kycStatusCases,
     searchCases
-} from "../../src/data/user/GetUserCases";
+} from "../../src/data/user/GetListUserCases";
 
 test.describe('GET /v1/users - List Users', () => {
 
@@ -32,7 +32,6 @@ test.describe('GET /v1/users - List Users', () => {
         accessToken = passwordBody.access_token;
 
     })
-
 
     for (const testCase of positiveCases) {
 

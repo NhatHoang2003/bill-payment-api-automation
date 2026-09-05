@@ -4,13 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npx playwright test",
-    "test:headed": "npx playwright test --headed",
-    "test:debug": "npx playwright test --debug",
-    "test:report": "npx playwright show-report",
-    "health": "npx playwright test tests/health",
-    "auth": "npx playwright test tests/auth",
-    "test:all": "npx playwright test"
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:users": "playwright test tests/users",
+    "test:create-user": "playwright test tests/users/create-user.spec.ts",
+    "test:list-users": "playwright test tests/users/list-users.spec.ts",
+    "report": "playwright show-report"
   },
   "repository": {
     "type": "git",
