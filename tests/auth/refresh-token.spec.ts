@@ -2,7 +2,7 @@ import { expect, test } from '../../src/fixtures/ApiFixture';
 import { env } from '../../src/config/env';
 import { refreshTokenCases } from '../../src/data/auth/refreshTokenCases';
 import { validateSchema } from '../../src/utils/SchemaValidator';
-import { UserResponseSchema } from '../../src/schemas/user/UserResponseSchema';
+import { UserResponseSchema } from '../../src/schemas/users/ListUserResponseSchema';
 
 
 test.describe('POST /oauth/token - refresh_token', () => {
