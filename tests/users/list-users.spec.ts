@@ -13,29 +13,9 @@ import {
 
 test.describe('GET /v1/users - List Users', () => {
 
-    let accessToken: string
-
-    test.beforeAll(async ({ authService }) => {
-
-        const passwordResponse = await authService.getTokenJson({
-            grant_type: 'password',
-            username: env.oauth.username,
-            password: env.oauth.password
-        })
-
-        expect(passwordResponse.status()).toBe(200);
-
-        const passwordBody = await passwordResponse.json();
-
-        expect(passwordBody.refresh_token).toBeTruthy();
-
-        accessToken = passwordBody.access_token;
-
-    })
-
     for (const testCase of positiveCases) {
 
-        test(testCase.name, async ({ userService }) => {
+        test(testCase.name, async ({ userService, accessToken }) => {
 
             const response = await userService.getListUsers(testCase.query, accessToken);
 
@@ -57,7 +37,7 @@ test.describe('GET /v1/users - List Users', () => {
 
     for (const testCase of pageCases) {
 
-        test(testCase.name, async ({ userService }) => {
+        test(testCase.name, async ({ userService, accessToken }) => {
 
             if (testCase.expected.status === 400) {
                 test.fixme(
@@ -102,7 +82,7 @@ test.describe('GET /v1/users - List Users', () => {
 
     for (const testCase of limitCases) {
 
-        test(testCase.name, async ({ userService }) => {
+        test(testCase.name, async ({ userService, accessToken }) => {
 
             if (testCase.expected.status === 400) {
                 test.fixme(
@@ -141,7 +121,7 @@ test.describe('GET /v1/users - List Users', () => {
 
     for (const testCase of kycStatusCases) {
 
-        test(testCase.name, async ({ userService }) => {
+        test(testCase.name, async ({ userService, accessToken }) => {
 
             if (testCase.expected.status === 400) {
                 test.fixme(
@@ -180,7 +160,7 @@ test.describe('GET /v1/users - List Users', () => {
     }
 
     for (const testCase of searchCases) {
-        test(testCase.name, async ({ userService }) => {
+        test(testCase.name, async ({ userService, accessToken }) => {
 
             const response = await userService.getListUsers(
                 testCase.query,

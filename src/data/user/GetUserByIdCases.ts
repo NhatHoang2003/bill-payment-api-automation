@@ -3,7 +3,7 @@ export const userIdPositiveCases = [
         name: 'should get user with valid existing userId',
 
         query: {
-            userId: 'user-1986eb1c',
+            userId: 'user-848683c7',
         },
 
         expected: {
@@ -13,22 +13,22 @@ export const userIdPositiveCases = [
                 success: true,
 
                 data: {
-                    id: 'user-1986eb1c',
-                    email: 'test-user.0kcpna@example.com',
+                    id: 'user-848683c7',
+                    email: 'test-user.lcfief@example.com',
                     phone: '+84394267205',
                     firstName: 'Odoriko',
-                    lastName: 'Lê',
+                    lastName: 'Tokyo Drift',
                     kycStatus: 'pending',
                     address: {
                         line1: 'Lái Thiêu',
                         line2: null,
                         city: 'Bình Dương',
-                        state: 'jjj',
+                        state: null,
                         postalCode: '700000',
                         country: 'IN',
                     },
-                    createdAt: '2026-09-05T08:39:32.971Z',
-                    updatedAt: '2026-09-05T09:05:12.958Z',
+                    createdAt: '2026-09-11T06:32:10.329Z',
+                    updatedAt: '2026-09-11T06:39:44.310Z',
                 },
 
                 meta: {

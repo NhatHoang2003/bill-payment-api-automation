@@ -7,29 +7,9 @@ import { validateSchema } from '../../src/utils/SchemaValidator';
 
 test.describe('GET /v1/users/:id - Get User By ID', () => {
 
-    let accessToken: string
-
-    test.beforeAll(async ({ authService }) => {
-
-        const passwordResponse = await authService.getTokenJson({
-            grant_type: 'password',
-            username: env.oauth.username,
-            password: env.oauth.password
-        });
-
-        expect(passwordResponse.status()).toBe(200);
-        const passwordBody = await passwordResponse.json();
-
-        expect(passwordBody.refresh_token).toBeTruthy();
-        expect(passwordBody.access_token).toBeTruthy();
-
-        accessToken = passwordBody.access_token;
-
-    })
-
     for (const testCase of userIdPositiveCases) {
 
-        test(testCase.name, async ({ userService }) => {
+        test(testCase.name, async ({ userService, accessToken }) => {
 
             const response = await userService.getUserById(testCase.query, accessToken);
 
@@ -58,7 +38,7 @@ test.describe('GET /v1/users/:id - Get User By ID', () => {
 
     for (const testCase of userIdNegativeCases) {
 
-        test(testCase.name, async ({ userService }) => {
+        test(testCase.name, async ({ userService, accessToken }) => {
 
             const response = await userService.getUserById(testCase.query, accessToken);
 
@@ -89,7 +69,7 @@ test.describe('GET /v1/users/:id - Get User By ID', () => {
 
     for (const testCase of userIdEdgeCases) {
 
-        test(testCase.name, async ({ userService }) => {
+        test(testCase.name, async ({ userService, accessToken }) => {
 
             const response = await userService.getUserById(testCase.query, accessToken);
 

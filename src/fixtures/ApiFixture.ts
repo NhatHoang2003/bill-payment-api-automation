@@ -1,54 +1,53 @@
+// src/fixtures/ApiFixture.ts
 import { test as base, expect } from '@playwright/test';
-
-import { HealthService } from '../services/HealthService';
+import fs from 'fs';
+import path from 'path';
 import { AuthService } from '../services/AuthService';
 import { UserService } from '../services/UserService';
-import { env } from '../config/env';
+import { HealthService } from '../services/HealthService';
 
-type ApiFixtures = {
-    healthService: HealthService;
+const TOKEN_FILE = path.join(__dirname, '..', '..', '.auth', 'token.json');
+
+type TestFixtures = {
     authService: AuthService;
     userService: UserService;
+    healthService: HealthService;
+};
 
+type WorkerFixtures = {
     accessToken: string;
 };
 
-export const test = base.extend<ApiFixtures>({
-
-    accessToken: async ({ authService }, use) => {
-        const passwordResponse = await authService.getTokenJson({
-            grant_type: 'password',
-            username: env.oauth.username,
-            password: env.oauth.password
-        })
-
-        expect(passwordResponse.status()).toBe(200);
-
-        const passwordBody = await passwordResponse.json();
-
-        expect(passwordBody.refresh_token).toBeTruthy();
-        expect(passwordBody.access_token).toBeTruthy();
-
-        await use(passwordBody.accessToken);
-    },
-
-    healthService: async ({ request }, use) => {
-        const healthService = new HealthService(request);
-
-        await use(healthService);
-    },
-
+export const test = base.extend<TestFixtures, WorkerFixtures>({
     authService: async ({ request }, use) => {
-        const authService = new AuthService(request);
-
-        await use(authService);
+        await use(new AuthService(request));
     },
 
     userService: async ({ request }, use) => {
-        const userService = new UserService(request);
-
-        await use(userService);
+        await use(new UserService(request));
     },
+
+    healthService: async ({ request }, use) => {
+        await use(new HealthService(request));
+    },
+
+    accessToken: [async ({ }, use) => {
+        if (!fs.existsSync(TOKEN_FILE)) {
+            throw new Error(
+                `Token file not found at ${TOKEN_FILE}. Did globalSetup run successfully?`
+            );
+        }
+
+        const { accessToken, expiresAt } = JSON.parse(fs.readFileSync(TOKEN_FILE, 'utf-8'));
+
+        if (Date.now() >= expiresAt) {
+            throw new Error(
+                'Access token has expired mid-run. Consider re-running globalSetup or shortening the test run.'
+            );
+        }
+
+        await use(accessToken);
+    }, { scope: 'worker' }],
 });
 
-export { expect } from '@playwright/test';
+export { expect };

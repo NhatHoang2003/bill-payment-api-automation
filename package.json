@@ -11,6 +11,8 @@
     "test:users": "playwright test tests/users",
     "test:create-user": "playwright test tests/users/create-user.spec.ts",
     "test:list-users": "playwright test tests/users/list-users.spec.ts",
+    "test:update-user": "playwright test tests/users/update-user.spec.ts",
+    "test:partial-update-user": "playwright test tests/users/partial-update-user.spec.ts",
     "report": "playwright show-report"
   },
   "repository": {

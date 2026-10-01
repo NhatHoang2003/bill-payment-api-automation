@@ -176,7 +176,7 @@ export const detailUserPositiveCases = [
                 city: 'Ho Chi Minh',
                 state: 'SG',
                 postalCode: '700000',
-                country: 'VN',
+                country: 'IN',
             },
         },
         expected: {

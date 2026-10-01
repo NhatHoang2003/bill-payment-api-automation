@@ -17,9 +17,9 @@ test.describe('POST /oauth/token - password', () => {
 
             const body = await response.json();
 
-            console.log(`\n${testCase.name}`);
-            console.log('Status:', response.status());
-            console.log('Body:', body);
+            // console.log(`\n${testCase.name}`);
+            // console.log('Status:', response.status());
+            // console.log('Body:', body);
 
             if (testCase.expected.status === 200) {
                 expect(body.access_token).toBeTruthy();
