@@ -39,3 +39,9 @@ export const MetaSchema = z.object({
     version: z.string(),
     pagination: PaginationSchema,
 });
+
+export const UserResponseSchema = z.object({
+    success: z.boolean(),
+    data: z.array(DataSchema),
+    meta: MetaSchema,
+})

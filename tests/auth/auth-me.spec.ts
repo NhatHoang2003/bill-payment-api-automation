@@ -3,7 +3,7 @@ import { env } from "../../src/config/env";
 import { expect, test } from '../../src/fixtures/ApiFixture'
 
 test.describe('GET v1/auth/me', () => {
-    
+
     test('should get authenticated user with Bearer Token', async ({ request }) => {
 
         const authService = new AuthService(request);
@@ -17,7 +17,7 @@ test.describe('GET v1/auth/me', () => {
         expect(apiKeyToken.status()).toBe(200);
 
         const tokenBody = await apiKeyToken.json();
-        
+
         expect(tokenBody.access_token).toBeTruthy();
         expect(tokenBody.token_type).toBe('Bearer')
 
@@ -51,7 +51,7 @@ test.describe('GET v1/auth/me', () => {
         const response = await authService.getCurrentUserWithBasicAuth(
             env.oauth.username,
             env.oauth.password
-        );  
+        );
 
         expect(response.status()).toBe(200);
 
@@ -80,7 +80,7 @@ test.describe('GET v1/auth/me', () => {
 
         const response = await authService.getCurrentUserwithApiKey(
             env.apiKey
-        );  
+        );
 
         expect(response.status()).toBe(200);
 
@@ -104,4 +104,3 @@ test.describe('GET v1/auth/me', () => {
     })
 
 })
-    

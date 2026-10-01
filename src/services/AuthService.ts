@@ -10,9 +10,14 @@ export class AuthService {
     }
 
     async getTokenJson(body: TokenRequest): Promise<APIResponse> {
-        return this.apiClient.post('/oauth/token', {
+        const response = await this.apiClient.post('/oauth/token', {
             data: body
         });
+
+        // console.log('TOKEN STATUS:', response.status());
+        // console.log('TOKEN HEADERS:', response.headers());
+
+        return response;
     }
 
     async getTokenForm(body: TokenRequest): Promise<APIResponse> {

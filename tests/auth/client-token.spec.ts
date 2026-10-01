@@ -18,9 +18,9 @@ test.describe('POST /oauth/token - client_credentials', () => {
 
             const body = await response.json();
 
-            console.log(`\n${testCase.name}`);
-            console.log('Status:', response.status());
-            console.log('Body:', body);
+            // console.log(`\n${testCase.name}`);
+            // console.log('Status:', response.status());
+            // console.log('Body:', body);
 
             if (testCase.expected.status === 200) {
                 expect(body.access_token).toBeTruthy();
@@ -29,13 +29,13 @@ test.describe('POST /oauth/token - client_credentials', () => {
                 expect(body.scope).toBeTruthy();
                 expect(body.created_at).toBeTruthy();
             }
-        
+
             if (testCase.expected.status !== 200) {
                 expect(body.success).toBe(testCase.expected.body.success);
                 expect(body.error.code).toBe(testCase.expected.body.error?.code);
-                
-                if(typeof testCase.expected.body.error?.message === 'string') {
-                    expect(body.error.message).toBe(testCase.expected.body.error?.message); 
+
+                if (typeof testCase.expected.body.error?.message === 'string') {
+                    expect(body.error.message).toBe(testCase.expected.body.error?.message);
                 } else {
                     expect(body.error.message).toBeTruthy();
                 }
